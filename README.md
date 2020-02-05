@@ -11,7 +11,7 @@ $ pip install -r requirements.txt
 
 Run the application:
 ```
-$ python -m redis_demonstration --help
+$ python -m redis-demonstration --help
 ```
 
 To run the tests:
