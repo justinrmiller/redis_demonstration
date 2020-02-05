@@ -13,9 +13,10 @@ def clear():
 
 def load_demonstration_data(redis_connection):
     num_users = 100000
-    click.echo("Loading session data for {num_users} users.")
-    for i in range(1, num_users):
-        redis_connection.set(f"session:{i}", json.dumps({"token": f"arbitrary token for user {i}", "last_logged_in": 3600}))
+    click.echo(f"Loading session data for {num_users} users.")
+    session_data = json.dumps({"token": f"arbitrary token for user", "last_logged_in": 3600})
+    for i in range(1, num_users): 
+        redis_connection.set(f"session:{i}", session_data)
 
 @click.group()
 def redis_demonstration():
@@ -27,8 +28,7 @@ def demo(rediss):
     exit = False
     while (exit == False):
         clear()
-        redis_pool = redis.ConnectionPool.from_url(url=rediss)
-        redis_conn = redis.Redis(connection_pool=redis_pool)
+        redis_conn = redis.Redis.from_url(url=rediss)
         click.echo(f'Connected to redis instance: {rediss}')
         click.echo("Options:\n" + 
             "1. Load demonstration data\n"
