@@ -1,6 +1,6 @@
 # redis-demonstration
 
-redis-demonstration is a pPython application that allows for the presentation of Redis features.
+redis-demonstration is a Python application that allows for the presentation of Redis features.
 
 ## Basic setup
 
