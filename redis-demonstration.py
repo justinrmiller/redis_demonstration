@@ -1,4 +1,5 @@
 import click
+import random
 import redis
 import json
 from os import system, name 
@@ -12,11 +13,12 @@ def clear():
         _ = system('clear') 
 
 def load_demonstration_data(redis_connection):
-    num_users = 100000
+    num_users = 200000
     click.echo(f"Loading session data for {num_users} users.")
-    session_data = json.dumps({"token": f"arbitrary token for user", "last_logged_in": 3600})
-    for i in range(1, num_users): 
-        redis_connection.set(f"session:{i}", session_data)
+    pipeline = redis_connection.pipeline()
+    for i in range(0, num_users): 
+        pipeline.set(f"session:{i + 1}", json.dumps({"token": f"arbitrary token for user {i + 1}", "last_logged_in": random.randrange(3600)}))
+    pipeline.execute()
 
 @click.group()
 def redis_demonstration():
@@ -34,7 +36,7 @@ def demo(rediss):
             "1. Load demonstration data\n"
             "10. Exit\n"
         )
-        option = click.prompt('Please choose an option: ', type=int)
+        option = click.prompt('Please choose an option', type=int)
         if option == 1: 
             load_demonstration_data(redis_conn)
             click.confirm('Data loaded. Hit enter to return to main menu.')
